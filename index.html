@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcane Eats: Four Classes Update</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #fef3c7;
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%);
+        }
+        .gradient-purple {
+            background: linear-gradient(135deg, #6b21a8 0%, #3f0f5c 100%);
+        }
+        .gradient-blue {
+            background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
+        }
+        .gradient-green {
+            background: linear-gradient(135deg, #15803d 0%, #14532d 100%);
+        }
+        .gradient-orange {
+            background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="bg-amber-900 text-amber-50 py-8 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex items-center justify-center gap-3 mb-2">
+                <span style="font-size: 2.5rem;"></span>
+                <h1 class="text-5xl font-bold">ARCANE EATS</h1>
+                <span style="font-size: 2.5rem;"></span>
+            </div>
+            <p class="text-center text-amber-200 text-xl">The Four Classes Update</p>
+            <p class="text-center text-amber-100 text-sm mt-2">Master new cooking techniques and command powerful culinary forces</p>
+        </div>
+    </div>
+
+    <!-- Sticky Class Selector -->
+    <div class="sticky top-0 bg-amber-100 border-b-2 border-amber-900 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex gap-2 justify-center mb-2" id="classButtons"></div>
+            <p class="text-amber-900 text-center italic text-xs max-w-4xl mx-auto" id="classDescription"></p>
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <div class="bg-white rounded-lg border-4 border-amber-900 p-6 mb-8" id="classAbilitySection">
+            <p class="text-center text-amber-900 text-lg font-bold">Class Ability: <span id="classAbilityText"></span></p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardsContainer"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-amber-900 text-amber-50 py-6 px-4 text-center">
+        <p class="text-sm">Arcane Eats: Five Classes Update | A Fanmade Expansion</p>
+    </div>
+
+    <script>
+        const data = {
+            "classes": [
+                {
+                    "id": "berserker",
+                    "name": "Bomb Appetit, the Berserker",
+                    "blurb": "Thrives in high-pressure environments and dangerous dishes. Welcomes complaints.",
+                    "colorClass": "gradient-red",
+                    "borderColor": "border-red-500",
+                    "classAbility": "Takes 1 less damage on your turn.",
+                    "cards": [
+                        {"name": "Iron Liver", "energy": 1, "cookValue": 4, "cookTime": 1, "description": "<strong>Stress 2. 4 Tough.</strong>"},
+                        {"name": "Grizzled Cheese", "energy": 0, "cookValue": 5, "cookTime": 2, "description": "<strong>Stress 2. Draw 1.</strong>."},
+                        {"name": "Durian", "energy": 0, "cookValue": 6, "cookTime": 0, "description": "<strong>6 Tough.</strong><br> All customers complain."},
+                        {"name": "Daredeviled Eggs", "energy": 2, "cookValue": 8, "cookTime": 1, "description": "Your next ingredient costs <strong>Stress</strong> instead. <strong>Burn.</strong>"},
+                        {"name": "Salt Elemental", "energy": 3, "cookValue": 8, "cookTime": 2, "description": "The next hit of damage you receive heals you instead. <strong>Burn.</strong>"},
+                        {"name": "Bomb Appetit", "energy": 0, "cookValue": 10, "cookTime": 3, "description": "<strong>3 Pack.</strong> Give all non-boss customers <strong>Explosive.</strong>"},
+                    ]
+                },
+                {
+                    "id": "vampire",
+                    "name": "Count Cornula, the Vampire",
+                    "blurb": "Master of the graveyard shift. Gains a power spike at night.",
+                    "colorClass": "gradient-purple",
+                    "borderColor": "border-purple-500",
+                    "classAbility": "When the doors close, draw 1 and +1 energy.",
+                    "cards": [
+                        {"name": "Nightcap Mushroom", "energy": 1, "cookValue": 3, "cookTime": 1, "description": "-2 cook value at day. <br>+2 cook value at night."},
+                        {"name": "Phase Spider Legs", "energy": 1, "cookValue": 4, "cookTime": 2, "description": "Has <strong>+1 Stack</strong> at night."},
+                        {"name": "Beholder Eyescream", "energy": 2, "cookValue": 9, "cookTime": 2, "description": "Has <strong>6 Chill</strong> at night."},
+                        {"name": "Grave Moss Flakes", "energy": 1, "cookValue": 0, "cookTime": 0, "description": "<strong>Garnish</strong><br> Each turn at night, +2 value."},
+                        {"name": "Wizard Omelette", "energy": 2, "cookValue": 5, "cookTime": 1, "description": "When the doors close, automatically cook this on a random cooktop."},
+                        {"name": "Lichbane", "energy": 2, "cookValue": 14, "cookTime": 2, "description": "Start the day with Ingredients <strong>Burned.</strong> Return them with -1 energy at night."},
+                    ]
+                },
+                {
+                    "id": "summoner",
+                    "name": "Summoner",
+                    "blurb": "Summons the Monster Platter.",
+                    "colorClass": "gradient-blue",
+                    "borderColor": "border-blue-500",
+                    "classAbility": "Your base cards are Platterpuses.",
+                    "cards": [
+                        {"name": "Platterpus", "energy": 1, "cookValue": 5, "cookTime": 2, "description": "Shuffle the Monster Platter into your deck. If already done, give it a random upgrade instead."},
+                        {"name": "Platterpie", "energy": 2, "cookValue": 5, "cookTime": 1, "description": "Shuffle the Monster Platter into your deck. If already done, give it -1 energy instead."},
+                        {"name": "Platterplate", "energy": 0, "cookValue": 2, "cookTime": 1, "description": "Shuffle the Monster Platter into your deck. If already done, draw it instead."},
+                        {"name": "Platterpepper", "energy": 0, "cookValue": 1, "cookTime": 0, "description": "<strong>Garnish.</strong>Shuffle the Monster Platter into your deck. If already done, give it +3 value instead."},
+                        {"name": "Platter Plantain Split", "energy": 1, "cookValue": 3, "cookTime": 1, "description": "<strong>2 Stack</strong>. Shuffle the Monster Platter into your deck. If already done, give it <strong>+1 Pack</strong> instead."},
+                        {"name": "Monster Platter", "energy": 3, "cookValue": 20, "cookTime": 1, "description": "Shuffled in by Platter ingredients."}
+                    ]
+                },
+                {
+                    "id": "changeling",
+                    "name": "Changeling",
+                    "blurb": "Ever-changing. Adaptive. No two menus on different days are the same.",
+                    "colorClass": "gradient-green",
+                    "borderColor": "border-green-500",
+                    "classAbility": "Draw an extra card with 'random' each turn.",
+                    "cards": [
+                        {"name": "Shifting Turnip", "energy": 1, "cookValue": 1, "cookTime": 1, "description": "<strong>Persistent.</strong> Each turn, transform into a random 2-cost ingredient. it costs (1)."},
+                        {"name": "Box of Mystery Seeds", "energy": 1, "cookValue": 3, "cookTime": 1, "description": "On play, randomly gain +2 value, <strong>Impress All 1</strong>, or <strong>+2 Chill</strong>."},
+                        {"name": "Spaghetti Monster", "energy": 3, "cookValue": 13, "cookTime": 13, "description": "Randomly jumble ALL numbers on screen."},
+                        {"name": "Keyword Alphabet Soup", "energy": 2, "cookValue": 0, "cookTime": 1, "description": "Place a random 1-cost <strong>Heavy, Spicy</strong> and<strong> Zingy</strong> ingredient on this cooktop."},
+                        {"name": "Cookthulu Calamari", "energy": 3, "cookValue": 17, "cookTime": 1, "description": "Take an extra turn where Cookthulhu controls you."},
+                        {"name": "Potluck", "energy": 3, "cookValue": 0, "cookTime": 1, "description": "Place random ingredients with a total Cost of 4 on random cooktops."},
+                        {"name": "Catch of the Day", "energy": 2, "cookValue": 8, "cookTime": 1, "description": "Gets a random bonus depending on the day."},
+
+                    ]
+                },
+               
+            ]
+        };
+
+        let selectedClass = 0;
+
+        function renderClassButtons() {
+            const container = document.getElementById('classButtons');
+            container.innerHTML = '';
+            data.classes.forEach((cls, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = cls.name;
+                btn.className = index === selectedClass 
+                    ? `px-3 py-1 rounded-lg font-bold text-xs transition-all text-white shadow-lg ${cls.colorClass}`
+                    : 'px-3 py-1 rounded-lg font-bold text-xs transition-all bg-white text-amber-900 border border-amber-300 hover:border-amber-500';
+                btn.onclick = () => {
+                    selectedClass = index;
+                    renderClassButtons();
+                    renderCards();
+                    updateDescription();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateDescription() {
+            document.getElementById('classDescription').textContent = data.classes[selectedClass].blurb;
+            document.getElementById('classAbilityText').textContent = data.classes[selectedClass].classAbility;
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            const cls = data.classes[selectedClass];
+            
+            cls.cards.forEach(card => {
+                const cardHTML = `
+                    <div class="flex flex-col items-center">
+                        <div class="${cls.colorClass} p-1 rounded-2xl shadow-2xl w-full max-w-sm">
+                            <div class="bg-amber-100 rounded-xl p-6 relative">
+                                <!-- Energy Badge -->
+                                <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-orange-400 to-red-600 rounded-full border-4 border-amber-900 flex items-center justify-center shadow-lg">
+                                    <div class="text-2xl font-bold text-white">${card.energy}</div>
+                                </div>
+
+                                <!-- Card Name -->
+                                <h3 class="text-2xl font-bold text-amber-900 mt-4 mb-6 text-center">${card.name}</h3>
+
+                                <!-- Stats Display Area -->
+                                <div class="bg-white rounded-lg p-8 mb-6 min-h-48 flex flex-col justify-center items-center border-2 border-amber-300">
+                                    <p class="text-amber-700 text-sm uppercase tracking-wider mb-2">Card Stats</p>
+                                    <p class="text-center text-amber-900 italic">${card.description}</p>
+                                </div>
+
+                                <!-- Bottom Stats -->
+                                <div class="flex justify-between items-end">
+                                    <!-- Cook Value -->
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div class="w-14 h-14 bg-blue-200 border-4 border-blue-400 rounded-full flex items-center justify-center shadow-md">
+                                            <div class="text-lg font-bold">🍴</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-amber-700 uppercase font-semibold">Cook</p>
+                                            <p class="text-xl font-bold text-amber-900">${card.cookValue}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Cook Time -->
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div class="w-14 h-14 bg-yellow-300 border-4 border-yellow-600 rounded-full flex items-center justify-center shadow-md">
+                                            <div class="text-lg font-bold">⏱️</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-xs text-amber-700 uppercase font-semibold">Time</p>
+                                            <p class="text-xl font-bold text-amber-900">${card.cookTime}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // Initialize
+        renderClassButtons();
+        updateDescription();
+        renderCards();
+    </script>
+</body>
+</html>
